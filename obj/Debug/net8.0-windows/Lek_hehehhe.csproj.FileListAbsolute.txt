@@ -24,3 +24,4 @@ C:\Users\alle07002\OneDrive - Växjö kommun\Skrivbordet\program\Lek_hehehhe\obj
 C:\Users\alle07002\OneDrive - Växjö kommun\Skrivbordet\program\Lek_hehehhe\obj\Debug\net8.0-windows\Lek_hehehhe.pdb
 C:\Users\alle07002\OneDrive - Växjö kommun\Skrivbordet\program\Lek_hehehhe\obj\Debug\net8.0-windows\Lek_hehehhe.genruntimeconfig.cache
 C:\Users\alle07002\OneDrive - Växjö kommun\Skrivbordet\program\Lek_hehehhe\obj\Debug\net8.0-windows\ref\Lek_hehehhe.dll
+C:\Users\alle07002\OneDrive - Växjö kommun\Skrivbordet\program\Lek_hehehhe\obj\Debug\net8.0-windows\Lek_hehehhe.sourcelink.json
