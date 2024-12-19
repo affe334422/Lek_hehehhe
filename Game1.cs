@@ -100,7 +100,7 @@ public class Game1 : Game
             countdown = 1;
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.E))
+        if (kstate.IsKeyDown(Keys.Up) || countdown1 < 5)
         {
             //skärmen
             _graphics.PreferredBackBufferWidth+=2;
@@ -112,9 +112,11 @@ public class Game1 : Game
             kordinatx+=1;
             kordinaty+=1;
 
+            countdown1++;
+
             _graphics.ApplyChanges();
         }
-        if (Keyboard.GetState().IsKeyDown(Keys.Q))
+        if (kstate.IsKeyDown(Keys.Down))
         {
             //skärmen
             _graphics.PreferredBackBufferWidth-=2;
@@ -125,6 +127,8 @@ public class Game1 : Game
             //där de studsar
             kordinatx-=1;
             kordinaty-=1;
+
+            
 
             _graphics.ApplyChanges();
         }
@@ -161,7 +165,7 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.HotPink);
+        GraphicsDevice.Clear(Color.Wheat);
         
 
         // TODO: Add your drawing code here
