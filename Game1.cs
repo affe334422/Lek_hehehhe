@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -72,31 +73,30 @@ public class Game1 : Game
         KeyboardState kstate  = Keyboard.GetState();
         
 
-        if(kstate.IsKeyDown(Keys.F)){
+        if(kstate.IsKeyDown(Keys.S)){
             stop = 2;
         }
-        if(kstate.IsKeyDown(Keys.R)){
+        if(kstate.IsKeyDown(Keys.G)){
             stop = 1;
         }
 
 
 
-        if(countdown != 10 && stop == 1){
+        if(countdown != 100 && stop == 1){
             countdown++;
         }
-        if(/*countdown == 10 && stop == 1 || */kstate.IsKeyDown(Keys.R) || countdown == 10){
+        if(/*countdown == 10 && stop == 1 || */kstate.IsKeyDown(Keys.G) && countdown == 100){
             int Hurmångaloopar = 5;
 
-            for(int i = 1; i < Hurmångaloopar; i++){
-                boll.Add(new Rectangle(kordinatx,kordinaty+i,20,20));
-                bollhastighet.Add(new Point(bollxvo *= -1,bollyvo += 0)); 
-                bollhastighet.Add(new Point(bollxvo += 0,bollyvo*=-1));
-            }
+            
+            boll.Add(new Rectangle(kordinatx,kordinaty,20,20));
+            bollhastighet.Add(new Point(bollxvo *= -1,bollyvo += 0)); 
+            bollhastighet.Add(new Point(bollxvo += 0,bollyvo*=-1));
+            
             
 
 
-            bollxvo = 5;
-            bollyvo = 5;
+            
             countdown = 1;
         }
 
@@ -134,28 +134,66 @@ public class Game1 : Game
         }
 
         
-        
-        
-        
-        
+List<int> bollCooldown = new List<int>(); // Cooldown för varje boll
 
-        for(int i = 0; i < boll.Count; i++){
-            boll[i] = new Rectangle(boll[i].X + bollhastighet[i].X, boll[i].Y + bollhastighet[i].Y, boll[i].Width,boll[i].Height);
-        
+for (int i = boll.Count - 1; i >= 0; i--) // Iterera baklänges
+{
+    // Om bollCooldown inte har tillräckligt många element, fyll på
+    while (bollCooldown.Count < boll.Count)
+    {
+        bollCooldown.Add(0); // Nollställ cooldown för nya bollar
+    }
 
-            if(boll[i].Y <= 0 || boll[i].Y >= ybollgräns){
-                bollhastighet[i] = new Point(bollhastighet[i].X, -bollhastighet[i].Y);
+    // Minska cooldown
+    if (bollCooldown[i] > 0)
+    {
+        bollCooldown[i]--;
+        continue; // Hoppa över denna boll om cooldown är aktiv
+    }
 
-            }
+    // Flytta bollen
+    boll[i] = new Rectangle(boll[i].X + bollhastighet[i].X, boll[i].Y + bollhastighet[i].Y, boll[i].Width, boll[i].Height);
 
-            if(boll[i].X <= 0 || boll[i].X >= xbollgräns){
-                //boll[i] = new Rectangle(390,230,20,20);
-                //bollhastighet[i] = new Point(bollxvo *= -1,bollyvo *= -1);
-                bollhastighet[i] = new Point(-bollhastighet[i].X ,bollhastighet[i].Y);
+    // Kontrollera om bollen träffar toppen eller botten
+    if (boll[i].Y <= 0 || boll[i].Y >= ybollgräns)
+    {
+        // Spara bollens position, bredd och höjd
+        var originalPosition = boll[i].Location;
+        var originalWidth = boll[i].Width;
+        var originalHeight = boll[i].Height;
 
-            }
-        
+        // Ta bort den gamla bollen och dess hastighet
+        boll.RemoveAt(i);
+        bollhastighet.RemoveAt(i);
+        bollCooldown.RemoveAt(i);
+
+        // Skapa två nya bollar på samma plats med olika hastigheter
+        var random = new Random();
+        for (int j = 0; j < 2; j++)
+        {
+            // Generera en ny slumpmässig hastighet
+            var newSpeed = new Point(
+                random.Next(-5, 6), // Slumpmässig X-hastighet
+                random.Next(1, 6) * (random.Next(0, 2) == 0 ? -1 : 1) // Positiv eller negativ Y-hastighet
+            );
+
+            // Lägg till en ny boll
+            boll.Add(new Rectangle(originalPosition.X, originalPosition.Y, originalWidth, originalHeight));
+            bollhastighet.Add(newSpeed);
+
+            // Lägg till en cooldown för de nya bollarna
+            bollCooldown.Add(30); // T.ex. 30 uppdateringar innan den kan skapa nya bollar
         }
+    }
+    // Kontrollera om bollen träffar vänster eller höger vägg
+    else if (boll[i].X <= 0 || boll[i].X >= xbollgräns)
+    {
+        bollhastighet[i] = new Point(-bollhastighet[i].X, bollhastighet[i].Y);
+    }
+}
+
+
+
 
         // TODO: Add your update logic here
 
